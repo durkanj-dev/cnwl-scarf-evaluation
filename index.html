@@ -1,9 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SCARF Programme Staff Evaluation Survey — CNWL 2026</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.7;color:#0d0d0d;background:#f2f2ef;padding:1.5rem 1rem 3rem}
@@ -28,17 +22,41 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Ar
 .question{margin-bottom:1.75rem;padding-bottom:1.75rem;border-bottom:1px solid #eeeeea}
 .question:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
 
-/* Fix for alignment issues in Q4, Q11, Q19 */
-fieldset{border:none;padding:0;margin:0;min-width:0;display: block; width: 100%;}
-legend{font-size:15px;font-weight:500;color:#0d0d0d;line-height:1.5;margin-bottom:12px;display:block;width:100%;float:none;}
+/* --- THE FIX --- */
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  display: block;
+}
+
+legend {
+  font-size: 15px;
+  font-weight: 500;
+  color: #0d0d0d;
+  line-height: 1.5;
+  margin-bottom: 12px; /* Space between question and buttons */
+  display: block;      /* Forces it to be its own block */
+  width: 100%;         /* Takes up full width */
+  float: none !important; /* Forces removal of the float */
+}
+
+.yn-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  max-width: 100%;
+  clear: both !important; /* Prevents buttons from floating up next to the legend */
+  margin-top: 5px;
+}
+/* --- END OF FIX --- */
 
 .req-legend::after{content:" *";color:#c0392b}
 .q-meta{font-size:11px;color:#888;margin-bottom:4px}
 .q-note{font-size:12px;color:#666;font-style:italic;margin-bottom:10px}
 .q-label{display:block;font-size:15px;font-weight:500;color:#0d0d0d;line-height:1.5;margin-bottom:4px}
 .q-label.req::after{content:" *";color:#c0392b}
-
-/* Radio scale */
 .scale-labels{display:flex;justify-content:space-between;font-size:11px;color:#777;margin-bottom:6px;padding:0 2px}
 .radio-scale{display:flex;gap:4px;flex-wrap:nowrap}
 .radio-scale label{flex:1;min-width:0}
@@ -47,8 +65,6 @@ legend{font-size:15px;font-weight:500;color:#0d0d0d;line-height:1.5;margin-botto
 .radio-scale input[type=radio]:checked+.rb{background:#005EB8;border-color:#005EB8;color:#fff;font-weight:500}
 .radio-scale input[type=radio]:focus-visible+.rb{outline:3px solid #ffb700;outline-offset:2px}
 .radio-scale label:hover .rb{background:#deeeff;border-color:#005EB8;color:#003680}
-
-/* Wrap variant for multi-option */
 .radio-wrap{display:flex;flex-direction:column;gap:6px;width:100%}
 .radio-wrap label{width:100%}
 .radio-wrap input[type=radio]{position:absolute;opacity:0;width:0;height:0}
@@ -56,23 +72,16 @@ legend{font-size:15px;font-weight:500;color:#0d0d0d;line-height:1.5;margin-botto
 .radio-wrap input[type=radio]:checked+.rb{background:#005EB8;border-color:#005EB8;color:#fff;font-weight:500}
 .radio-wrap input[type=radio]:focus-visible+.rb{outline:3px solid #ffb700;outline-offset:2px}
 .radio-wrap label:hover .rb{background:#deeeff;border-color:#005EB8;color:#003680}
-
-/* Yes/No */
-.yn-group{display:flex;gap:8px;flex-wrap:wrap;max-width:100%;clear:both}
 .yn-group input[type=radio]{position:absolute;opacity:0;width:0;height:0}
 .yn-group input[type=radio]+.yb{display:flex;align-items:center;min-height:48px;padding:8px 20px;border:1.5px solid #bbb;border-radius:8px;font-size:14px;color:#444;cursor:pointer;transition:all .15s}
 .yn-group input[type=radio]:checked+.yb{background:#005EB8;border-color:#005EB8;color:#fff;font-weight:500}
 .yn-group input[type=radio]:focus-visible+.yb{outline:3px solid #ffb700;outline-offset:2px}
 .yn-group label:hover .yb{background:#deeeff;border-color:#005EB8}
-
-/* Checkbox */
 .check-group{display:flex;flex-direction:column;gap:4px}
 .check-group label{display:flex;align-items:center;gap:12px;font-size:14px;color:#222;cursor:pointer;padding:8px 10px;min-height:44px;border-radius:6px;border:1px solid transparent;transition:background .1s}
 .check-group label:hover{background:#f5f5f2;border-color:#d8d8d4}
 .check-group input[type=checkbox]{width:20px;height:20px;accent-color:#005EB8;flex-shrink:0;cursor:pointer}
 .check-group input[type=checkbox]:focus-visible{outline:3px solid #ffb700;outline-offset:2px}
-
-/* Matrix */
 .matrix-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .matrix-table{width:100%;border-collapse:collapse;font-size:13px;min-width:440px}
 .matrix-table th{text-align:center;padding:6px 4px;color:#555;font-weight:500;font-size:11px;border-bottom:1.5px solid #d8d8d4;background:#f7f7f4}
@@ -81,20 +90,14 @@ legend{font-size:15px;font-weight:500;color:#0d0d0d;line-height:1.5;margin-botto
 .matrix-table td:first-child{text-align:left;font-size:14px;color:#222;padding-left:0;white-space:nowrap;font-weight:400}
 .matrix-table input[type=radio]{width:20px;height:20px;accent-color:#005EB8;cursor:pointer}
 .matrix-table input[type=radio]:focus-visible{outline:3px solid #ffb700;outline-offset:2px}
-
-/* Form elements */
 .form-select{width:100%;padding:10px 12px;border:1.5px solid #bbb;border-radius:8px;font-size:15px;color:#222;background:#fff;min-height:48px}
 .form-select:focus{outline:3px solid #ffb700;outline-offset:2px;border-color:#005EB8}
 .form-textarea{width:100%;padding:10px 12px;border:1.5px solid #bbb;border-radius:8px;font-size:15px;color:#222;resize:vertical;min-height:90px;font-family:inherit;line-height:1.6}
 .form-textarea:focus{outline:3px solid #ffb700;outline-offset:2px;border-color:#005EB8}
-
-/* Errors */
 .error-msg{color:#c0392b;font-size:13px;font-weight:500;margin-top:8px;display:none;padding:6px 10px;background:#fde8e8;border-left:3px solid #c0392b;border-radius:0 6px 6px 0}
 .has-error .error-msg{display:block}
 .has-error .form-select,.has-error .form-textarea{border-color:#c0392b}
-
-/* Navigation */
-.nav-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top: 2rem;}
+.nav-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:10px 24px;border-radius:8px;font-size:15px;font-weight:500;cursor:pointer;border:1.5px solid #bbb;transition:all .15s;background:#fff;color:#333;text-decoration:none}
 .btn:focus-visible{outline:3px solid #ffb700;outline-offset:2px}
 .btn-primary{background:#005EB8;border-color:#005EB8;color:#fff}
@@ -103,17 +106,19 @@ legend{font-size:15px;font-weight:500;color:#0d0d0d;line-height:1.5;margin-botto
 .btn-submit{background:#00693e;border-color:#00693e;color:#fff;padding:12px 32px}
 .btn-submit:hover{background:#004f2e}
 .btn:disabled{opacity:.45;cursor:not-allowed;pointer-events:none}
-
-/* Conditional */
 .conditional{display:none}
 .conditional.visible{display:block}
-
-/* Submitting */
 .submitting-overlay{display:none;position:fixed;inset:0;background:rgba(255,255,255,.9);z-index:999;align-items:center;justify-content:center;flex-direction:column;gap:14px}
 .submitting-overlay.visible{display:flex}
 .spinner{width:40px;height:40px;border:3px solid #d8d8d4;border-top-color:#005EB8;border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-
+.confirmation{background:#fff;border-radius:12px;border:1px solid #d8d8d4;padding:3rem 2rem;text-align:center;display:none}
+.confirmation.visible{display:block}
+.conf-icon{width:60px;height:60px;background:#d4edda;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:28px;color:#00693e;font-weight:700}
+.confirmation h2{font-size:20px;font-weight:500;margin-bottom:.75rem}
+.confirmation p{font-size:14px;color:#555;line-height:1.7;max-width:480px;margin:0 auto}
+.footnote{font-size:12px;color:#888;text-align:center;margin-top:1.5rem;line-height:1.7}
+.footnote a{color:#005EB8}
 @media(max-width:520px){
   .survey-header,.questions-wrap{padding:1.25rem}
   .section-header{padding:.85rem 1.25rem}
@@ -123,228 +128,3 @@ legend{font-size:15px;font-weight:500;color:#0d0d0d;line-height:1.5;margin-botto
   .nav-row .btn{width:100%}
 }
 </style>
-</head>
-<body>
-
-<a href="#main-content" class="skip-link">Skip to survey</a>
-
-<div class="container">
-
-  <header class="survey-header">
-    <p class="trust-label">Central and North West London NHS Foundation Trust</p>
-    <h1>SCARF Programme — Staff Impact Evaluation Survey</h1>
-    <p>This survey is <strong>anonymous</strong> and takes approximately 8–10 minutes. Your responses help evaluate the effectiveness and value for money of the SCARF cultural framework. There are no right or wrong answers.</p>
-    <div class="notice-box" role="note">Questions marked <strong>*</strong> are required. All responses are submitted securely and anonymously. No identifying information is collected.</div>
-  </header>
-
-  <div class="progress-wrap">
-    <div class="progress-bar-outer" role="progressbar" aria-label="Survey progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progress-outer">
-      <div class="progress-bar-inner" id="progress-bar" style="width:0%"></div>
-    </div>
-    <span class="progress-label" id="progress-label" aria-live="polite">Section 1 of 5</span>
-  </div>
-
-  <div id="submitting-overlay" class="submitting-overlay" role="status" aria-label="Submitting your response">
-    <div class="spinner" aria-hidden="true"></div>
-    <span style="font-size:14px;color:#444">Submitting your response...</span>
-  </div>
-
-  <main id="main-content" tabindex="-1">
-
-    <section class="section-card active" id="section-0" aria-labelledby="sec-a-heading">
-      <div class="section-header">
-        <p class="section-meta">Section A of 5</p>
-        <h2 id="sec-a-heading">Awareness and understanding</h2>
-      </div>
-      <div class="questions-wrap">
-
-        <div class="question" id="wrap-q1">
-          <p class="q-meta">Q1</p>
-          <fieldset>
-            <legend class="req-legend">Before completing this survey, how familiar were you with the SCARF framework?</legend>
-            <p class="q-note">Select one option</p>
-            <div class="radio-scale">
-              <label><input type="radio" name="q1" value="1"><span class="rb">Not at all familiar</span></label>
-              <label><input type="radio" name="q1" value="2"><span class="rb">Slightly familiar</span></label>
-              <label><input type="radio" name="q1" value="3"><span class="rb">Moderately familiar</span></label>
-              <label><input type="radio" name="q1" value="4"><span class="rb">Very familiar</span></label>
-              <label><input type="radio" name="q1" value="5"><span class="rb">Extremely familiar</span></label>
-            </div>
-          </fieldset>
-          <div class="error-msg" id="err-q1" role="alert">Please select an option.</div>
-        </div>
-
-        <div class="question" id="wrap-q2">
-          <p class="q-meta">Q2</p>
-          <label class="q-label req" for="q2-ta">Without referring to any materials, what does the acronym SCARF stand for?</label>
-          <p class="q-note" id="q2-hint">Write in your own words — partial answers are welcome</p>
-          <textarea class="form-textarea" id="q2-ta" name="q2" aria-describedby="q2-hint err-q2" aria-required="true" style="min-height:130px" placeholder="S = &#10;C = &#10;A = &#10;R = &#10;F = "></textarea>
-          <div class="error-msg" id="err-q2" role="alert">Please enter a response.</div>
-        </div>
-
-        <div class="question" id="wrap-q3">
-          <p class="q-meta">Q3</p>
-          <fieldset>
-            <legend class="req-legend">How did you first learn about the SCARF framework?</legend>
-            <p class="q-note">Select all that apply</p>
-            <div class="check-group">
-              <label><input type="checkbox" name="q3" value="Formal training or workshop"> Formal training or workshop</label>
-              <label><input type="checkbox" name="q3" value="Line manager or team meeting"> Line manager or team meeting</label>
-              <label><input type="checkbox" name="q3" value="Email or intranet communication"> Email or intranet communication</label>
-              <label><input type="checkbox" name="q3" value="SCARF promotional video or film"> SCARF promotional video or film</label>
-              <label><input type="checkbox" name="q3" value="CNWL induction or onboarding"> CNWL induction or onboarding</label>
-              <label><input type="checkbox" name="q3" value="Colleague conversation"> Colleague conversation</label>
-              <label><input type="checkbox" name="q3" value="I have not received any information about SCARF"> I have not received any information about SCARF</label>
-              <label><input type="checkbox" name="q3" value="Other"> Other (please specify below)</label>
-            </div>
-            <label for="q3-other" style="display:block;font-size:12px;color:#666;font-style:italic;margin-top:10px;">If other, please specify:</label>
-            <textarea class="form-textarea" id="q3-other" name="q3_other" style="min-height:50px;margin-top:4px" aria-label="Other source, please specify"></textarea>
-          </fieldset>
-          <div class="error-msg" id="err-q3" role="alert">Please select at least one option.</div>
-        </div>
-
-        <div class="question" id="wrap-q4">
-          <p class="q-meta">Q4</p>
-          <fieldset>
-            <legend class="req-legend">Have you ever accessed the SCARF training materials on the CNWL intranet or website?</legend>
-            <div class="yn-group">
-              <label><input type="radio" name="q4" value="Yes"><span class="yb">Yes</span></label>
-              <label><input type="radio" name="q4" value="No"><span class="yb">No</span></label>
-              <label><input type="radio" name="q4" value="Not sure"><span class="yb">Not sure</span></label>
-            </div>
-          </fieldset>
-          <div class="error-msg" id="err-q4" role="alert">Please select an option.</div>
-        </div>
-
-      </div>
-    </section>
-
-    <section class="section-card" id="section-1" aria-labelledby="sec-b-heading">
-      <div class="section-header">
-        <p class="section-meta">Section B of 5</p>
-        <h2 id="sec-b-heading">Behavioural impact</h2>
-      </div>
-      <div class="questions-wrap">
-
-        <div class="question" id="wrap-q5">
-          <p class="q-meta">Q5</p>
-          <fieldset>
-            <legend class="req-legend">To what extent has the SCARF framework changed the way you approach your day-to-day work?</legend>
-            <div class="scale-labels"><span>No change at all</span><span>Very significant change</span></div>
-            <div class="radio-scale">
-              <label><input type="radio" name="q5" value="1"><span class="rb">1</span></label>
-              <label><input type="radio" name="q5" value="2"><span class="rb">2</span></label>
-              <label><input type="radio" name="q5" value="3"><span class="rb">3</span></label>
-              <label><input type="radio" name="q5" value="4"><span class="rb">4</span></label>
-              <label><input type="radio" name="q5" value="5"><span class="rb">5</span></label>
-            </div>
-          </fieldset>
-          <div class="error-msg" id="err-q5" role="alert">Please select an option.</div>
-        </div>
-
-        <div class="question" id="wrap-q7">
-          <p class="q-meta">Q7</p>
-          <fieldset>
-            <legend class="req-legend">Since the SCARF programme was introduced, how has the culture in your immediate team changed?</legend>
-            <div class="radio-wrap">
-              <label><input type="radio" name="q7" value="Improved significantly"><span class="rb">Improved significantly</span></label>
-              <label><input type="radio" name="q7" value="Improved slightly"><span class="rb">Improved slightly</span></label>
-              <label><input type="radio" name="q7" value="No change"><span class="rb">No change</span></label>
-              <label><input type="radio" name="q7" value="Worsened slightly"><span class="rb">Worsened slightly</span></label>
-              <label><input type="radio" name="q7" value="Worsened significantly"><span class="rb">Worsened significantly</span></label>
-              <label><input type="radio" name="q7" value="Not sure"><span class="rb">Not sure</span></label>
-            </div>
-          </fieldset>
-          <div class="error-msg" id="err-q7" role="alert">Please select an option.</div>
-        </div>
-
-      </div>
-    </section>
-
-    <section class="section-card" id="section-3" aria-labelledby="sec-d-heading">
-      <div class="section-header">
-        <p class="section-meta">Section D of 5</p>
-        <h2 id="sec-d-heading">Value for money and governance</h2>
-      </div>
-      <div class="questions-wrap">
-
-        <div class="question" id="wrap-q11">
-          <p class="q-meta">Q11</p>
-          <fieldset>
-            <legend class="req-legend">Were you aware that CNWL spent over £600,000 on external consultancy to develop and deliver the SCARF programme?</legend>
-            <div class="yn-group">
-              <label><input type="radio" name="q11" value="Yes"><span class="yb">Yes</span></label>
-              <label><input type="radio" name="q11" value="No"><span class="yb">No</span></label>
-            </div>
-          </fieldset>
-          <div class="error-msg" id="err-q11" role="alert">Please select an option.</div>
-        </div>
-
-      </div>
-    </section>
-
-    <section class="section-card" id="section-4" aria-labelledby="sec-e-heading">
-      <div class="section-header">
-        <p class="section-meta">Section E of 5</p>
-        <h2 id="sec-e-heading">About you</h2>
-      </div>
-      <div class="questions-wrap">
-
-        <div class="question" id="wrap-q19">
-          <p class="q-meta">Q19</p>
-          <fieldset>
-            <legend class="req-legend">Do you manage other staff?</legend>
-            <div class="yn-group">
-              <label><input type="radio" name="q19" value="Yes"><span class="yb">Yes</span></label>
-              <label><input type="radio" name="q19" value="No"><span class="yb">No</span></label>
-              <label><input type="radio" name="q19" value="Prefer not to say"><span class="yb">Prefer not to say</span></label>
-            </div>
-          </fieldset>
-          <div class="error-msg" id="err-q19" role="alert">Please select an option.</div>
-        </div>
-
-      </div>
-    </section>
-
-    <nav class="nav-row" aria-label="Survey navigation" id="nav-row">
-      <button class="btn btn-secondary" id="btn-prev" onclick="navigate(-1)" disabled>← Previous</button>
-      <button class="btn btn-primary" id="btn-next" onclick="navigate(1)">Next →</button>
-    </nav>
-
-  </main>
-</div>
-
-<script>
-  let currentStep = 0;
-  const sections = document.querySelectorAll('.section-card');
-  const btnPrev = document.getElementById('btn-prev');
-  const btnNext = document.getElementById('btn-next');
-  const progressBar = document.getElementById('progress-bar');
-  const progressLabel = document.getElementById('progress-label');
-
-  function navigate(dir) {
-    sections[currentStep].classList.remove('active');
-    currentStep += dir;
-    sections[currentStep].classList.add('active');
-    
-    // Update progress
-    const percent = (currentStep / (sections.length - 1)) * 100;
-    progressBar.style.width = percent + '%';
-    progressLabel.innerText = `Section ${currentStep + 1} of ${sections.length}`;
-    
-    // Update buttons
-    btnPrev.disabled = currentStep === 0;
-    if (currentStep === sections.length - 1) {
-      btnNext.innerText = 'Submit Survey';
-      btnNext.classList.add('btn-submit');
-    } else {
-      btnNext.innerText = 'Next →';
-      btnNext.classList.remove('btn-submit');
-    }
-    
-    window.scrollTo(0,0);
-  }
-</script>
-
-</body>
-</html>
