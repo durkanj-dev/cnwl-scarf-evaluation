@@ -1,72 +1,66 @@
+<style>
 /* =====================================================
-   GLOBAL FIX: FIELDSET / LEGEND ALIGNMENT (ALL QUESTIONS)
-   Fixes right-shift issue for Q4, Q11, Q19
+   FIX: FIELDSET / LEGEND ALIGNMENT (Q4, Q11, Q19)
    ===================================================== */
 
-/* Reset fieldset completely */
 fieldset {
-  all: unset;                 /* removes ALL browser default styles */
+  border: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+  min-width: 0;
   display: block;
   width: 100%;
-  margin: 0 0 1rem 0;
 }
 
-/* Rebuild legend cleanly */
-fieldset > legend {
-  all: unset;                 /* removes weird browser legend behavior */
-  display: block;
-  width: 100%;
-
+legend {
   font-size: 15px;
   font-weight: 500;
   color: #0d0d0d;
   line-height: 1.5;
-
   margin-bottom: 12px;
+
+  display: block;
+  width: 100%;
+
+  float: none !important;
+  position: static !important;
 }
 
-/* Ensure question wrapper behaves normally */
 .question {
   display: block;
   width: 100%;
   text-align: left;
 }
 
-/* Force answer groups onto a new line */
-fieldset > .yn-group,
-fieldset > .radio-wrap,
-fieldset > .radio-scale {
+.yn-group {
   display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+
   width: 100%;
   max-width: 100%;
 
-  flex-wrap: wrap;
   justify-content: flex-start;
   align-items: center;
 
-  gap: 8px;
   margin-top: 6px;
+  clear: both !important;
 }
 
-/* Prevent inline/float weirdness anywhere */
+.yn-group label {
+  margin: 0;
+}
+
+/* Safety overrides */
 fieldset * {
   float: none !important;
 }
 
-/* Extra safety: labels behave consistently */
-.yn-group label,
-.radio-wrap label,
-.radio-scale label {
-  display: inline-flex;
-  margin: 0;
-}
-
-/* Hard stop for any right alignment inheritance */
-.question *,
-fieldset * {
+.question * {
   text-align: left !important;
 }
 
 /* =====================================================
    END FIX
    ===================================================== */
+</style>
