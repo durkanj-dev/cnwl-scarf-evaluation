@@ -1,4 +1,4 @@
-/* --- FIX FOR LEGEND / FIELDSET ALIGNMENT --- */
+/* --- COMPLETE FIX FOR MISALIGNED QUESTIONS (4, 11, 19) --- */
 
 fieldset {
   border: none;
@@ -6,8 +6,8 @@ fieldset {
   margin: 0;
   min-width: 0;
 
-  display: flex;           /* Ensures proper stacking */
-  flex-direction: column;  /* Keeps legend above inputs */
+  display: block;              /* Prevent legend + flex bugs */
+  width: 100%;
 }
 
 legend {
@@ -20,19 +20,35 @@ legend {
   display: block;
   width: 100%;
 
-  float: none !important;  /* Override browser defaults */
-  position: relative;      /* Prevent odd offset behavior */
-  left: 0;
+  float: none !important;      /* Kill browser default float */
+  position: static !important; /* Reset weird offsets */
 }
 
+/* Force question container to behave normally */
+.question {
+  display: block;
+  text-align: left;
+}
+
+/* Yes/No button group fix */
 .yn-group {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+
+  width: 100%;                 /* Prevent shrinking/right shift */
   max-width: 100%;
 
-  clear: both !important;  /* Prevent wrapping beside legend */
-  margin-top: 5px;
+  justify-content: flex-start; /* Keep aligned left */
+  align-items: center;
+
+  margin-top: 6px;
+  clear: both !important;      /* Ensure it stays below legend */
+}
+
+/* Extra safety: prevent any accidental right alignment */
+.yn-group label {
+  margin: 0;
 }
 
 /* --- END FIX --- */
