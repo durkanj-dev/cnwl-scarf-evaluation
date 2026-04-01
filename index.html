@@ -653,23 +653,41 @@ function saveBackup(data) {
 }
 
 // Attempt submission with one automatic retry on network failure.
-async function attemptSubmit(data, retries = 1) {
-  for (let attempt = 0; attempt <= retries; attempt++) {
+async function attemptSubmit(data) {
+  return new Promise((resolve) => {
     try {
-      const formData = new FormData();
-      formData.append(GOOGLE_FORM_ENTRY, JSON.stringify(data));
-      await fetch(GOOGLE_FORM_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: formData
-      });
-      return true;
+      const iframe = document.createElement('iframe');
+      iframe.name = 'hidden_iframe';
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = GOOGLE_FORM_URL;
+      form.target = 'hidden_iframe';
+
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = GOOGLE_FORM_ENTRY;
+      input.value = JSON.stringify(data);
+      form.appendChild(input);
+
+      document.body.appendChild(form);
+
+      iframe.onload = function() {
+        document.body.removeChild(form);
+        document.body.removeChild(iframe);
+        resolve(true);
+      };
+
+      setTimeout(() => resolve(true), 3000);
+
+      form.submit();
     } catch(e) {
-      console.error(`Submission attempt ${attempt + 1} failed:`, e);
-      if (attempt < retries) await new Promise(r => setTimeout(r, 1500));
+      console.error('Submission error:', e);
+      resolve(false);
     }
-  }
-  return false;
+  });
 }
 
 async function submitSurvey() {
