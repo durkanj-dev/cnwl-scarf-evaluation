@@ -45,15 +45,15 @@ legend::after{content:"";display:block;clear:both}
 .radio-scale input[type=radio]:focus-visible+.rb{outline:3px solid #ffb700;outline-offset:2px}
 .radio-scale label:hover .rb{background:#deeeff;border-color:#005EB8;color:#003680}
 /* Wrap variant for multi-option */
-.radio-wrap{display:flex;gap:6px;flex-wrap:wrap}
-.radio-wrap label{flex:1 1 calc(50% - 6px);min-width:130px}
+.radio-wrap{display:flex;flex-direction:column;gap:6px;width:100%}
+.radio-wrap label{width:100%}
 .radio-wrap input[type=radio]{position:absolute;opacity:0;width:0;height:0}
-.radio-wrap input[type=radio]+.rb{display:flex;align-items:center;justify-content:center;min-height:48px;padding:10px 12px;border:1.5px solid #bbb;border-radius:8px;font-size:14px;color:#444;cursor:pointer;transition:all .15s;text-align:center;line-height:1.3}
+.radio-wrap input[type=radio]+.rb{display:flex;align-items:center;justify-content:flex-start;min-height:48px;padding:10px 16px;border:1.5px solid #bbb;border-radius:8px;font-size:14px;color:#444;cursor:pointer;transition:all .15s;text-align:left;line-height:1.4;width:100%}
 .radio-wrap input[type=radio]:checked+.rb{background:#005EB8;border-color:#005EB8;color:#fff;font-weight:500}
 .radio-wrap input[type=radio]:focus-visible+.rb{outline:3px solid #ffb700;outline-offset:2px}
 .radio-wrap label:hover .rb{background:#deeeff;border-color:#005EB8;color:#003680}
 /* Yes/No */
-.yn-group{display:flex;gap:8px;flex-wrap:wrap}
+.yn-group{display:flex;gap:8px;flex-wrap:wrap;max-width:100%}
 .yn-group input[type=radio]{position:absolute;opacity:0;width:0;height:0}
 .yn-group input[type=radio]+.yb{display:flex;align-items:center;min-height:48px;padding:8px 20px;border:1.5px solid #bbb;border-radius:8px;font-size:14px;color:#444;cursor:pointer;transition:all .15s}
 .yn-group input[type=radio]:checked+.yb{background:#005EB8;border-color:#005EB8;color:#fff;font-weight:500}
@@ -175,7 +175,7 @@ legend::after{content:"";display:block;clear:both}
           <p class="q-meta">Q2</p>
           <label class="q-label req" for="q2-ta">Without referring to any materials, what does the acronym SCARF stand for?</label>
           <p class="q-note" id="q2-hint">Write in your own words — partial answers are welcome</p>
-          <textarea class="form-textarea" id="q2-ta" name="q2" aria-describedby="q2-hint err-q2" aria-required="true" placeholder="S = &#10;C = &#10;A = &#10;R = &#10;F = "></textarea>
+          <textarea class="form-textarea" id="q2-ta" name="q2" aria-describedby="q2-hint err-q2" aria-required="true" style="min-height:130px" placeholder="S = &#10;C = &#10;A = &#10;R = &#10;F = "></textarea>
           <div class="error-msg" id="err-q2" role="alert">Please enter a response.</div>
         </div>
 
@@ -301,7 +301,7 @@ legend::after{content:"";display:block;clear:both}
             <div class="radio-wrap">
               <label><input type="radio" name="q8" value="Strongly agree"><span class="rb">Strongly agree</span></label>
               <label><input type="radio" name="q8" value="Tend to agree"><span class="rb">Tend to agree</span></label>
-              <label style="flex:1 1 100%"><input type="radio" name="q8" value="Neither agree nor disagree"><span class="rb">Neither agree nor disagree</span></label>
+              <label ><input type="radio" name="q8" value="Neither agree nor disagree"><span class="rb">Neither agree nor disagree</span></label>
               <label><input type="radio" name="q8" value="Tend to disagree"><span class="rb">Tend to disagree</span></label>
               <label><input type="radio" name="q8" value="Strongly disagree"><span class="rb">Strongly disagree</span></label>
             </div>
@@ -329,7 +329,7 @@ legend::after{content:"";display:block;clear:both}
               <label><input type="radio" name="q9" value="Yes, slightly"><span class="rb">Yes, slightly</span></label>
               <label><input type="radio" name="q9" value="No difference"><span class="rb">No difference</span></label>
               <label><input type="radio" name="q9" value="Not sure"><span class="rb">Not sure</span></label>
-              <label style="flex:1 1 100%"><input type="radio" name="q9" value="No direct patient contact"><span class="rb">My role does not involve direct patient contact</span></label>
+              <label ><input type="radio" name="q9" value="No direct patient contact"><span class="rb">My role does not involve direct patient contact</span></label>
             </div>
           </fieldset>
           <div class="error-msg" id="err-q9" role="alert">Please select an option.</div>
@@ -382,7 +382,7 @@ legend::after{content:"";display:block;clear:both}
               <label><input type="radio" name="q12" value="Good value"><span class="rb">Good value</span></label>
               <label><input type="radio" name="q12" value="Poor value"><span class="rb">Poor value</span></label>
               <label><input type="radio" name="q12" value="Very poor value"><span class="rb">Very poor value</span></label>
-              <label style="flex:1 1 100%"><input type="radio" name="q12" value="Not enough information to say"><span class="rb">Not enough information to say</span></label>
+              <label ><input type="radio" name="q12" value="Not enough information to say"><span class="rb">Not enough information to say</span></label>
             </div>
           </fieldset>
           <div class="error-msg" id="err-q12" role="alert">Please select an option.</div>
@@ -395,7 +395,7 @@ legend::after{content:"";display:block;clear:both}
             <div class="radio-wrap">
               <label><input type="radio" name="q13" value="Strongly agree"><span class="rb">Strongly agree</span></label>
               <label><input type="radio" name="q13" value="Tend to agree"><span class="rb">Tend to agree</span></label>
-              <label style="flex:1 1 100%"><input type="radio" name="q13" value="Neither agree nor disagree"><span class="rb">Neither agree nor disagree</span></label>
+              <label ><input type="radio" name="q13" value="Neither agree nor disagree"><span class="rb">Neither agree nor disagree</span></label>
               <label><input type="radio" name="q13" value="Tend to disagree"><span class="rb">Tend to disagree</span></label>
               <label><input type="radio" name="q13" value="Strongly disagree"><span class="rb">Strongly disagree</span></label>
             </div>
@@ -634,24 +634,75 @@ function collectData() {
   return d;
 }
 
-async function submitSurvey() {
-  if(!validateSection(current)) return;
-  document.getElementById('submitting-overlay').classList.add('visible');
+// Save response to localStorage as backup before attempting network submission.
+// This ensures no data is lost if the Google Apps Script call fails silently
+// (a known limitation of mode:'no-cors' where the browser cannot read the response).
+function saveBackup(data) {
   try {
-    await fetch(GOOGLE_SCRIPT_URL, {
-      method:'POST', mode:'no-cors',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(collectData())
-    });
-  } catch(e){ console.error(e); }
-  document.getElementById('submitting-overlay').classList.remove('visible');
-  sections.forEach(s => s.style.display='none');
-  document.getElementById('nav-row').style.display='none';
-  document.querySelector('.progress-wrap').style.display='none';
+    const key = 'scarf_backup_' + Date.now();
+    localStorage.setItem(key, JSON.stringify(data));
+    // Keep only the 20 most recent backups to avoid filling storage
+    const allKeys = Object.keys(localStorage).filter(k => k.startsWith('scarf_backup_')).sort();
+    if (allKeys.length > 20) allKeys.slice(0, allKeys.length - 20).forEach(k => localStorage.removeItem(k));
+  } catch(e) {
+    // localStorage may be unavailable in some private browsing contexts — fail silently
+    console.warn('localStorage unavailable:', e);
+  }
+}
+
+// Attempt submission with one automatic retry on network failure.
+async function attemptSubmit(data, retries = 1) {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Required for Google Apps Script — response body is opaque but request succeeds
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      return true; // fetch completed without throwing — treat as success
+    } catch(e) {
+      console.error(`Submission attempt ${attempt + 1} failed:`, e);
+      if (attempt < retries) await new Promise(r => setTimeout(r, 1500)); // wait before retry
+    }
+  }
+  return false; // all attempts failed
+}
+
+async function submitSurvey() {
+  if (!validateSection(current)) return;
+  const overlay = document.getElementById('submitting-overlay');
+  overlay.classList.add('visible');
+
+  const data = collectData();
+
+  // Always save to localStorage first — this is the safety net
+  saveBackup(data);
+
+  const succeeded = await attemptSubmit(data);
+
+  overlay.classList.remove('visible');
+  sections.forEach(s => s.style.display = 'none');
+  document.getElementById('nav-row').style.display = 'none';
+  document.querySelector('.progress-wrap').style.display = 'none';
+
   const conf = document.getElementById('confirmation');
+
+  // If submission failed after retries, show a modified message so the user knows
+  if (!succeeded) {
+    conf.querySelector('p').textContent =
+      'Your response has been saved locally on this device. ' +
+      'If you are connected to the internet, please try reloading the page and submitting again. ' +
+      'If this problem persists, please contact the survey administrator.';
+    conf.querySelector('h2').textContent = 'Response saved — connection issue';
+    conf.querySelector('.conf-icon').textContent = '!';
+    conf.querySelector('.conf-icon').style.background = '#fff3cd';
+    conf.querySelector('.conf-icon').style.color = '#856404';
+  }
+
   conf.classList.add('visible');
   conf.focus();
-  window.scrollTo({top:0,behavior:'smooth'});
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 updateUI();
