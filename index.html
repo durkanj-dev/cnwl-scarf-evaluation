@@ -47,6 +47,7 @@ input[type=radio]:checked+.rb, input[type=radio]:checked+.yb{background:#005EB8;
 .confirmation{display:none;text-align:center;padding:3rem 1rem;background:#fff;border-radius:12px;border:1px solid #d8d8d4}
 .confirmation.visible{display:block}
 .conf-icon{font-size:40px;width:80px;height:80px;line-height:80px;background:#d4edda;border-radius:50%;margin:0 auto 1rem;color:#155724}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
@@ -55,7 +56,6 @@ input[type=radio]:checked+.rb, input[type=radio]:checked+.yb{background:#005EB8;
     <div style="border:4px solid #f3f3f3;border-top:4px solid #005EB8;border-radius:50%;width:40px;height:40px;animation:spin 1s linear infinite"></div>
     <p style="margin-top:15px">Submitting Securely...</p>
 </div>
-<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 
 <div class="container">
     <header class="survey-header">
@@ -118,6 +118,9 @@ input[type=radio]:checked+.rb, input[type=radio]:checked+.yb{background:#005EB8;
                         <label><strong>Q5. Impact on your work? (1-5)*</strong></label>
                         <div style="display:flex; gap:5px; margin-top:10px;">
                             <label style="flex:1"><input type="radio" name="q5" value="1"><span class="rb">1</span></label>
+                            <label style="flex:1"><input type="radio" name="q5" value="2"><span class="rb">2</span></label>
+                            <label style="flex:1"><input type="radio" name="q5" value="3"><span class="rb">3</span></label>
+                            <label style="flex:1"><input type="radio" name="q5" value="4"><span class="rb">4</span></label>
                             <label style="flex:1"><input type="radio" name="q5" value="5"><span class="rb">5</span></label>
                         </div>
                         <p class="error-msg">Required.</p>
@@ -130,21 +133,24 @@ input[type=radio]:checked+.rb, input[type=radio]:checked+.yb{background:#005EB8;
                         </table>
                         <p class="error-msg">Please rate all values.</p>
                     </div>
-                    </div>
+                </div>
             </section>
 
-            <section class="section-card" id="section-4">
+            <section class="section-card" id="section-2">
                 <div class="section-header"><h2>Section E: About You</h2></div>
                 <div class="questions-wrap">
                     <div class="question" id="wrap-q16">
                         <label><strong>Q16. Staff Group?*</strong></label>
                         <select class="form-select" id="q16-sel" name="q16">
                             <option value="">Select...</option>
-                            <option>Nursing</option><option>Medical</option><option>Admin</option>
+                            <option>Nursing</option>
+                            <option>Medical</option>
+                            <option>Admin</option>
+                            <option>Allied Health Professional</option>
                         </select>
                         <p class="error-msg">Required.</p>
                     </div>
-                    </div>
+                </div>
             </section>
 
             <nav class="nav-row" id="nav-row">
@@ -163,7 +169,8 @@ input[type=radio]:checked+.rb, input[type=radio]:checked+.yb{background:#005EB8;
 </div>
 
 <script>
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyejBBaeguv7Pvtea-vLDoM-HGLEMH0pRFEAeYanBYZfhQ6VAk4qkwjVuXP8uBAKTVzxg/exec";
+// UPDATED SCRIPT URL
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwoWn5al-a5SMbIeiwKNNNeM5wy2zC6tszXFA8GnEP8T81OHupdCSDhceUgO9HzgcG6QA/exec";
 const scarfValues = ["Status", "Certainty", "Autonomy", "Relatedness", "Fairness"];
 let current = 0;
 const sections = document.querySelectorAll('.section-card');
@@ -178,113 +185,107 @@ scarfValues.forEach((v, i) => {
 });
 
 function updateUI() {
-  sections.forEach((s,i) => s.classList.toggle('active', i === current));
-  document.getElementById('btn-prev').disabled = current === 0;
-  document.getElementById('btn-next').style.display = current < total-1 ? '' : 'none';
-  document.getElementById('btn-submit').style.display = current === total-1 ? '' : 'none';
-  const pct = Math.round((current/total)*100);
-  document.getElementById('progress-bar').style.width = pct+'%';
-  document.getElementById('progress-label').textContent = `Section ${current+1} of ${total}`;
-  window.scrollTo({top:0,behavior:'smooth'});
+    sections.forEach((s,i) => s.classList.toggle('active', i === current));
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').style.display = current < total-1 ? '' : 'none';
+    document.getElementById('btn-submit').style.display = current === total-1 ? '' : 'none';
+    const pct = Math.round((current/total)*100);
+    document.getElementById('progress-bar').style.width = pct+'%';
+    document.getElementById('progress-label').textContent = `Section ${current+1} of ${total}`;
+    window.scrollTo({top:0,behavior:'smooth'});
 }
 
 const reqBySec = {
-  0:['q1','q2','q3','q4'],
-  1:['q5','q6'], // Add 7 and 8 here
-  4:['q16'] // Add 17, 18, 19 here
+    0:['q1','q2','q3','q4'],
+    1:['q5','q6'],
+    2:['q16']
 };
 
 function validateSection(idx) {
-  const sec = sections[idx];
-  let valid = true, firstErr = null;
-  sec.querySelectorAll('.question').forEach(q => q.classList.remove('has-error'));
-  (reqBySec[idx]||[]).forEach(name => {
-    const wrap = document.getElementById('wrap-'+name);
-    if(!wrap) return;
-    let ok = true;
-    if(name==='q2'){
-      const ta = document.getElementById('q2-ta');
-      if(!ta.value.trim()) ok=false;
-    } else if(name==='q3'){
-      if(!sec.querySelectorAll('[name="q3"]:checked').length) ok=false;
-    } else if(name==='q6'){
-      scarfValues.forEach((_,i) => { if(!sec.querySelector(`[name="q6_${i}"]:checked`)) ok=false; });
-    } else {
-      const sel = document.getElementById(name+'-sel');
-      if(sel){ if(!sel.value) ok=false; }
-      else { if(!sec.querySelector(`[name="${name}"]:checked`)) ok=false; }
-    }
-    if(!ok){
-      wrap.classList.add('has-error');
-      valid=false;
-      if(!firstErr) firstErr=wrap;
-    }
-  });
-  if(firstErr) firstErr.scrollIntoView({behavior:'smooth',block:'center'});
-  return valid;
+    const sec = sections[idx];
+    let valid = true, firstErr = null;
+    sec.querySelectorAll('.question').forEach(q => q.classList.remove('has-error'));
+    (reqBySec[idx]||[]).forEach(name => {
+        const wrap = document.getElementById('wrap-'+name);
+        if(!wrap) return;
+        let ok = true;
+        if(name==='q2'){
+            const ta = document.getElementById('q2-ta');
+            if(!ta.value.trim()) ok=false;
+        } else if(name==='q3'){
+            if(!sec.querySelectorAll('[name="q3"]:checked').length) ok=false;
+        } else if(name==='q6'){
+            scarfValues.forEach((_,i) => { if(!sec.querySelector(`[name="q6_${i}"]:checked`)) ok=false; });
+        } else {
+            const sel = document.getElementById(name+'-sel');
+            if(sel){ if(!sel.value) ok=false; }
+            else { if(!sec.querySelector(`[name="${name}"]:checked`)) ok=false; }
+        }
+        if(!ok){
+            wrap.classList.add('has-error');
+            valid=false;
+            if(!firstErr) firstErr=wrap;
+        }
+    });
+    if(firstErr) firstErr.scrollIntoView({behavior:'smooth',block:'center'});
+    return valid;
 }
 
 function navigate(dir) {
-  if(dir===1 && !validateSection(current)) return;
-  current = Math.max(0, Math.min(total-1, current+dir));
-  updateUI();
+    if(dir===1 && !validateSection(current)) return;
+    current = Math.max(0, Math.min(total-1, current+dir));
+    updateUI();
 }
 
 function collectData() {
-  const d = {timestamp: new Date().toISOString()};
-  ['q1','q4','q5','q16'].forEach(n => {
-    const el = document.querySelector(`[name="${n}"]:checked`) || document.getElementById(n+'-sel');
-    d[n] = el ? el.value : '';
-  });
-  d.q2 = document.getElementById('q2-ta').value.trim();
-  d.q3 = Array.from(document.querySelectorAll('[name="q3"]:checked')).map(c=>c.value).join('; ');
-  scarfValues.forEach((v,i) => {
-    const el = document.querySelector(`[name="q6_${i}"]:checked`);
-    d[`q6_${v}`] = el ? el.value : '';
-  });
-  return d;
-}
-
-function saveBackup(data) {
-  try {
-    localStorage.setItem('scarf_backup_' + Date.now(), JSON.stringify(data));
-  } catch(e) { console.warn(e); }
+    const d = {timestamp: new Date().toISOString()};
+    ['q1','q4','q5'].forEach(n => {
+        const el = document.querySelector(`[name="${n}"]:checked`);
+        d[n] = el ? el.value : '';
+    });
+    d.q16 = document.getElementById('q16-sel').value;
+    d.q2 = document.getElementById('q2-ta').value.trim();
+    d.q3 = Array.from(document.querySelectorAll('[name="q3"]:checked')).map(c=>c.value).join('; ');
+    scarfValues.forEach((v,i) => {
+        const el = document.querySelector(`[name="q6_${i}"]:checked`);
+        d[`q6_${v}`] = el ? el.value : '';
+    });
+    return d;
 }
 
 async function attemptSubmit(data, retries = 1) {
-  for (let attempt = 0; attempt <= retries; attempt++) {
-    try {
-      await fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      return true;
-    } catch(e) {
-      if (attempt < retries) await new Promise(r => setTimeout(r, 1000));
+    for (let attempt = 0; attempt <= retries; attempt++) {
+        try {
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            return true;
+        } catch(e) {
+            if (attempt < retries) await new Promise(r => setTimeout(r, 1000));
+        }
     }
-  }
-  return false;
+    return false;
 }
 
 async function submitSurvey() {
-  if (!validateSection(current)) return;
-  const overlay = document.getElementById('submitting-overlay');
-  overlay.classList.add('visible');
-  const data = collectData();
-  saveBackup(data);
-  const succeeded = await attemptSubmit(data);
-  overlay.classList.remove('visible');
-  document.getElementById('scarf-form').style.display = 'none';
-  document.getElementById('nav-row').style.display = 'none';
-  document.querySelector('.progress-wrap').style.display = 'none';
-  const conf = document.getElementById('confirmation');
-  if (!succeeded) {
-      conf.querySelector('h2').textContent = 'Saved Offline';
-      conf.querySelector('.conf-icon').textContent = '!';
-  }
-  conf.classList.add('visible');
+    if (!validateSection(current)) return;
+    const overlay = document.getElementById('submitting-overlay');
+    overlay.classList.add('visible');
+    const data = collectData();
+    const succeeded = await attemptSubmit(data);
+    overlay.classList.remove('visible');
+    document.getElementById('scarf-form').style.display = 'none';
+    document.getElementById('nav-row').style.display = 'none';
+    document.querySelector('.progress-wrap').style.display = 'none';
+    const conf = document.getElementById('confirmation');
+    if (!succeeded) {
+        conf.querySelector('h2').textContent = 'Saved Offline';
+        conf.querySelector('.conf-icon').textContent = '!';
+    }
+    conf.classList.add('visible');
 }
 
 updateUI();
