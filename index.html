@@ -3,126 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCARF Programme Staff Evaluation Survey — CNWL 2026</title>
+    <title>SCARF Programme Survey — CNWL 2026</title>
     <style>
-        /* CSS STYLES */
-        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.7;color:#0d0d0d;background:#f2f2ef;padding:1.5rem 1rem 3rem}
-        .container{max-width:720px;margin:0 auto}
-        .survey-header{background:#fff;border-radius:12px;padding:1.75rem 2rem;margin-bottom:1.25rem;border:1px solid #d8d8d4}
-        .trust-label{font-size:12px;font-weight:600;color:#005EB8;text-transform:uppercase}
-        .section-card{background:#fff;border-radius:12px;border:1px solid #d8d8d4;margin-bottom:1.25rem;display:none;padding:1.5rem}
-        .section-card.active{display:block}
-        .section-header{background:#005EB8;padding:1rem;color:#fff;margin:-1.5rem -1.5rem 1.5rem -1.5rem;border-radius:11px 11px 0 0}
-        .btn{padding:10px 24px;border-radius:8px;cursor:pointer;font-weight:500;border:1px solid #bbb;background:#fff}
-        .btn-primary{background:#005EB8;color:#fff;border-color:#005EB8}
-        .btn-submit{background:#00693e;color:#fff;border-color:#00693e}
-        .radio-scale{display:flex;gap:5px;margin-top:10px}
-        .radio-scale label{flex:1;text-align:center;border:1px solid #bbb;padding:10px;border-radius:8px;cursor:pointer}
-        .radio-scale input{display:none}
-        .radio-scale input:checked + span{font-weight:bold;color:#005EB8}
-        .progress-wrap{background:#fff;padding:10px;border-radius:8px;margin-bottom:1rem;border:1px solid #d8d8d4}
-        .progress-bar-outer{height:8px;background:#d8d8d4;border-radius:4px}
-        .progress-bar-inner{height:100%;background:#005EB8;width:0%;transition:0.3s}
-        .submitting-overlay{display:none;position:fixed;inset:0;background:rgba(255,255,255,0.9);z-index:99;align-items:center;justify-content:center;flex-direction:column}
-        .submitting-overlay.visible{display:flex}
-        textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #bbb;margin-top:10px}
+        /* THE LOOK */
+        body { font-family: Arial, sans-serif; background: #f2f2ef; color: #333; padding: 20px; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; border: 1px solid #d8d8d4; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        h1 { color: #005EB8; font-size: 22px; margin-bottom: 10px; }
+        .section { display: none; }
+        .section.active { display: block; }
+        .btn { padding: 12px 24px; border-radius: 6px; cursor: pointer; border: 1px solid #bbb; font-weight: bold; }
+        .btn-next { background: #005EB8; color: white; border: none; }
+        .btn-submit { background: #00693e; color: white; border: none; }
+        textarea { width: 100%; padding: 10px; margin-top: 10px; border-radius: 6px; border: 1px solid #ccc; }
+        .progress { font-size: 12px; color: #666; margin-bottom: 20px; }
+        .overlay { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.8); z-index: 100; align-items: center; justify-content: center; font-weight: bold; }
+        .overlay.visible { display: flex; }
     </style>
 </head>
 <body>
 
-<div id="submitting-overlay" class="submitting-overlay">
-    <div style="border:4px solid #f3f3f3;border-top:4px solid #005EB8;border-radius:50%;width:40px;height:40px;animation:spin 1s linear infinite"></div>
-    <p>Submitting to Google Sheets...</p>
-</div>
-<style>@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>
+<div id="loader" class="overlay">Submitting to Google Sheets...</div>
 
 <div class="container">
-    <header class="survey-header">
-        <p class="trust-label">CNWL NHS Foundation Trust</p>
-        <h1>SCARF Programme Evaluation</h1>
-        <p>Anonymous Staff Survey 2026</p>
+    <header>
+        <p style="color:#005EB8; font-weight:bold; font-size:12px;">CNWL NHS Foundation Trust</p>
+        <h1>SCARF Evaluation Survey</h1>
+        <p class="progress" id="p-text">Step 1 of 3</p>
     </header>
 
-    <div class="progress-wrap">
-        <div class="progress-bar-outer"><div class="progress-bar-inner" id="progress-bar"></div></div>
-        <p id="progress-label" style="font-size:12px;margin-top:5px">Section 1 of 2</p>
-    </div>
+    <form id="scarfForm">
+        <div class="section active" id="s0">
+            <p><strong>Q1. How familiar are you with the SCARF framework?</strong></p>
+            <input type="radio" name="q1" value="1"> 1 (Low)<br>
+            <input type="radio" name="q1" value="2"> 2<br>
+            <input type="radio" name="q1" value="3"> 3<br>
+            <input type="radio" name="q1" value="4"> 4<br>
+            <input type="radio" name="q1" value="5"> 5 (High)
+        </div>
 
-    <main id="main-content">
-        <form id="scarfForm">
-            <section class="section-card active" id="section-0">
-                <div class="section-header"><h2>Awareness</h2></div>
-                <p><strong>Q1. How familiar are you with SCARF?</strong></p>
-                <div class="radio-scale">
-                    <label><input type="radio" name="q1" value="1"><span>1 (Low)</span></label>
-                    <label><input type="radio" name="q1" value="2"><span>2</span></label>
-                    <label><input type="radio" name="q1" value="3"><span>3</span></label>
-                    <label><input type="radio" name="q1" value="4"><span>4</span></label>
-                    <label><input type="radio" name="q1" value="5"><span>5 (High)</span></label>
-                </div>
-                <br>
-                <p><strong>Q2. What does SCARF stand for?</strong></p>
-                <textarea name="q2" rows="3"></textarea>
-            </section>
+        <div class="section" id="s1">
+            <p><strong>Q2. What does SCARF stand for?</strong></p>
+            <textarea name="q2" rows="4" placeholder="S=, C=, A=..."></textarea>
+        </div>
 
-            <section class="section-card" id="section-1">
-                <div class="section-header"><h2>Impact & Comments</h2></div>
-                <p><strong>Q15. Any other comments?</strong></p>
-                <textarea name="q15" rows="4"></textarea>
-            </section>
+        <div class="section" id="s2">
+            <p><strong>Q15. Any final feedback for the programme?</strong></p>
+            <textarea name="q15" rows="4"></textarea>
+        </div>
 
-            <div style="display:flex; justify-content: space-between; margin-top:20px;">
-                <button type="button" class="btn" id="btn-prev" style="display:none">Previous</button>
-                <button type="button" class="btn btn-primary" id="btn-next">Next</button>
-                <button type="button" class="btn btn-submit" id="btn-submit" style="display:none">Submit Response</button>
-            </div>
-        </form>
-    </main>
+        <div style="margin-top: 30px; display: flex; justify-content: space-between;">
+            <button type="button" class="btn" id="prevBtn" style="display:none;">Previous</button>
+            <button type="button" class="btn btn-next" id="nextBtn">Next</button>
+            <button type="button" class="btn btn-submit" id="submitBtn" style="display:none;">Submit Response</button>
+        </div>
+    </form>
 </div>
 
 <script>
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyejBBaeguv7Pvtea-vLDoM-HGLEMH0pRFEAeYanBYZfhQ6VAk4qkwjVuXP8uBAKTVzxg/exec";
-    let currentSection = 0;
-    const sections = document.querySelectorAll('.section-card');
+    const GOOGLE_URL = "https://script.google.com/macros/s/AKfycbyejBBaeguv7Pvtea-vLDoM-HGLEMH0pRFEAeYanBYZfhQ6VAk4qkwjVuXP8uBAKTVzxg/exec";
+    let step = 0;
+    const steps = document.querySelectorAll('.section');
     
-    function updateUI() {
-        sections.forEach((s, i) => s.classList.toggle('active', i === currentSection));
-        document.getElementById('btn-prev').style.display = currentSection === 0 ? 'none' : 'block';
-        document.getElementById('btn-next').style.display = currentSection === sections.length - 1 ? 'none' : 'block';
-        document.getElementById('btn-submit').style.display = currentSection === sections.length - 1 ? 'block' : 'none';
-        
-        const progress = ((currentSection + 1) / sections.length) * 100;
-        document.getElementById('progress-bar').style.width = progress + '%';
-        document.getElementById('progress-label').innerText = `Section ${currentSection + 1} of ${sections.length}`;
+    function showStep(n) {
+        steps.forEach((s, i) => s.classList.toggle('active', i === n));
+        document.getElementById('prevBtn').style.display = n === 0 ? 'none' : 'block';
+        document.getElementById('nextBtn').style.display = n === steps.length - 1 ? 'none' : 'block';
+        document.getElementById('submitBtn').style.display = n === steps.length - 1 ? 'block' : 'none';
+        document.getElementById('p-text').innerText = `Step ${n + 1} of ${steps.length}`;
     }
 
-    document.getElementById('btn-next').addEventListener('click', () => { currentSection++; updateUI(); });
-    document.getElementById('btn-prev').addEventListener('click', () => { currentSection--; updateUI(); });
+    document.getElementById('nextBtn').onclick = () => { step++; showStep(step); };
+    document.getElementById('prevBtn').onclick = () => { step--; showStep(step); };
 
-    document.getElementById('btn-submit').addEventListener('click', async () => {
-        const overlay = document.getElementById('submitting-overlay');
-        overlay.classList.add('visible');
-
-        const formData = {};
+    document.getElementById('submitBtn').onclick = async () => {
+        document.getElementById('loader').classList.add('visible');
+        const data = {};
         const inputs = document.querySelectorAll('input:checked, textarea');
-        inputs.forEach(i => formData[i.name] = i.value);
+        inputs.forEach(i => data[i.name] = i.value);
 
         try {
-            await fetch(GOOGLE_SCRIPT_URL, {
+            await fetch(GOOGLE_URL, {
                 method: "POST",
                 mode: "no-cors",
-                body: JSON.stringify(formData)
+                body: JSON.stringify(data)
             });
-            document.getElementById('main-content').innerHTML = "<h2>Thank you! Your response was saved.</h2>";
+            document.querySelector('.container').innerHTML = "<h1>Success!</h1><p>Your response has been recorded. You can close this window.</p>";
         } catch (e) {
-            alert("Error saving data.");
+            alert("Error submitting. Please try again.");
         } finally {
-            overlay.classList.remove('visible');
+            document.getElementById('loader').classList.remove('visible');
         }
-    });
-
-    updateUI();
+    };
 </script>
+
 </body>
 </html>
