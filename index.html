@@ -528,8 +528,7 @@ legend::after{content:"";display:none}
 </div>
 
 <script>
-const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdww0MW-UKQot1AiuylOeOEqti26v1rDTKafgKFYmucydXu4A/formResponse';
-const GOOGLE_FORM_ENTRY = 'entry.475344714';
+const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
 const scarfValues = ['Safe','Compassionate','Accountable','Reflective','Fair'];
 const sections = document.querySelectorAll('.section-card');
 const total = sections.length;
@@ -656,20 +655,19 @@ function saveBackup(data) {
 async function attemptSubmit(data, retries = 1) {
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      const formData = new FormData();
-      formData.append(GOOGLE_FORM_ENTRY, JSON.stringify(data));
-      await fetch(GOOGLE_FORM_URL, {
+      await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        mode: 'no-cors',
-        body: formData
+        mode: 'no-cors', // Required for Google Apps Script — response body is opaque but request succeeds
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
       });
-      return true;
+      return true; // fetch completed without throwing — treat as success
     } catch(e) {
       console.error(`Submission attempt ${attempt + 1} failed:`, e);
-      if (attempt < retries) await new Promise(r => setTimeout(r, 1500));
+      if (attempt < retries) await new Promise(r => setTimeout(r, 1500)); // wait before retry
     }
   }
-  return false;
+  return false; // all attempts failed
 }
 
 async function submitSurvey() {
