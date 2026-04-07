@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCARF Survey — Response Unpacker</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:15px;background:#f2f2ef;padding:2rem 1rem;color:#0d0d0d}
+.container{max-width:900px;margin:0 auto}
+.card{background:#fff;border-radius:12px;border:1px solid #d8d8d4;padding:1.5rem;margin-bottom:1.25rem}
+h1{font-size:20px;font-weight:600;margin-bottom:6px}
+p{font-size:13px;color:#555;margin-bottom:1rem}
+textarea{width:100%;min-height:120px;padding:10px;border:1.5px solid #bbb;border-radius:8px;font-size:13px;font-family:monospace;resize:vertical}
+textarea:focus{outline:2px solid #005EB8;border-color:#005EB8}
+button{background:#005EB8;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;margin-top:10px;margin-right:8px}
+button:hover{background:#004a94}
+.btn-green{background:#00693e}
+.btn-green:hover{background:#004f2e}
+.btn-secondary{background:#fff;color:#333;border:1.5px solid #bbb}
+.btn-secondary:hover{background:#f2f2ef}
+.trust{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#005EB8;margin-bottom:6px}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:1rem}
+th{background:#005EB8;color:#fff;padding:8px 10px;text-align:left;font-weight:500;font-size:11px;white-space:nowrap}
+td{padding:7px 10px;border-bottom:1px solid #eeeeea;vertical-align:top;max-width:200px;overflow-wrap:break-word}
+tr:nth-child(even) td{background:#f0f6ff}
+tr:hover td{background:#deeeff}
+.count{font-size:13px;color:#555;margin-top:8px}
+.error{color:#c0392b;font-size:13px;background:#fde8e8;padding:8px 12px;border-radius:6px;margin-top:8px;display:none}
+.instructions{font-size:13px;color:#444;line-height:1.8;background:#f7f7f4;border-radius:8px;padding:1rem;margin-bottom:1rem}
+.instructions ol{margin-left:1.25rem}
+.wrap{overflow-x:auto}
+#results{display:none}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="card">
+    <p class="trust">Central and North West London NHS Foundation Trust</p>
+    <h1>SCARF Survey — Response Unpacker</h1>
+    <p>Paste your raw response data from Google Sheets below to view responses in a readable table.</p>
+
+    <div class="instructions">
+      <strong>How to use:</strong>
+      <ol>
+        <li>Go to your Google Sheet: <a href="https://docs.google.com/spreadsheets/d/1x6cyO0l0rfMY0j3nuAlTys8rFG96AemZZJMHqg46xx8/edit" target="_blank">Open Sheet</a></li>
+        <li>Click on the <strong>Form responses 1</strong> tab</li>
+        <li>Click column B header to select all JSON data</li>
+        <li>Press <strong>Ctrl+C</strong> to copy</li>
+        <li>Paste into the box below and click <strong>Unpack responses</strong></li>
+      </ol>
+    </div>
+
+    <textarea id="input" placeholder='Paste your JSON data here — one response per line, or paste multiple cells from column B...'></textarea>
+    <div class="error" id="error-msg"></div>
+    <div>
+      <button onclick="unpack()">Unpack responses</button>
+      <button class="btn-green" onclick="downloadCSV()" id="btn-csv" style="display:none">Download as CSV</button>
+      <button class="btn-secondary" onclick="clearAll()">Clear</button>
+    </div>
+  </div>
+
+  <div class="card" id="results">
+    <p class="count" id="count-label"></p>
+    <div class="wrap">
+      <table id="output-table">
+        <thead id="table-head"></thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const LABELS = {
+  timestamp: 'Timestamp',
+  q1: 'Q1 Familiarity (1–5)',
+  q2: 'Q2 Acronym recall',
+  q3: 'Q3 How learned',
+  q3_other: 'Q3 Other',
+  q4: 'Q4 Accessed materials',
+  q4a: 'Q4a Usefulness (1–5)',
+  q5: 'Q5 Day-to-day change (1–5)',
+  q6_Safe: 'Q6 Safe',
+  q6_Compassionate: 'Q6 Compassionate',
+  q6_Accountable: 'Q6 Accountable',
+  q6_Reflective: 'Q6 Reflective',
+  q6_Fair: 'Q6 Fair',
+  q7: 'Q7 Culture change',
+  q8: 'Q8 Psychological safety',
+  q9: 'Q9 Patient impact',
+  q10: 'Q10 Complaint handling',
+  q11: 'Q11 Aware of £600k',
+  q12: 'Q12 Value for money',
+  q13: 'Q13 Leadership embodies SCARF',
+  q14: 'Q14 Overall effectiveness (1–5)',
+  q15: 'Q15 Open comments',
+  q16: 'Q16 Staff group',
+  q17: 'Q17 Length of service',
+  q18: 'Q18 Division',
+  q19: 'Q19 Manages staff'
+};
+
+const KEYS = Object.keys(LABELS);
+let parsedRows = [];
+
+function unpack() {
+  const raw = document.getElementById('input').value.trim();
+  const errEl = document.getElementById('error-msg');
+  errEl.style.display = 'none';
+  parsedRows = [];
+
+  if (!raw) {
+    errEl.textContent = 'Please paste some data first.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  const lines = raw.split('\n').map(l => l.trim()).filter(l => l.startsWith('{'));
+
+  if (lines.length === 0) {
+    errEl.textContent = 'No JSON data found. Make sure you are pasting from column B of the Form responses sheet.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  let errors = 0;
+  lines.forEach((line, i) => {
+    try {
+      const obj = JSON.parse(line);
+      parsedRows.push(obj);
+    } catch(e) {
+      errors++;
+    }
+  });
+
+  if (parsedRows.length === 0) {
+    errEl.textContent = 'Could not parse any responses. Please check the pasted data.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  renderTable();
+  document.getElementById('count-label').textContent = `${parsedRows.length} response${parsedRows.length !== 1 ? 's' : ''} found${errors > 0 ? ` (${errors} lines skipped)` : ''}`;
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('btn-csv').style.display = 'inline-block';
+  document.getElementById('results').scrollIntoView({behavior:'smooth'});
+}
+
+function renderTable() {
+  const thead = document.getElementById('table-head');
+  const tbody = document.getElementById('table-body');
+  thead.innerHTML = '';
+  tbody.innerHTML = '';
+
+  const headerRow = document.createElement('tr');
+  KEYS.forEach(k => {
+    const th = document.createElement('th');
+    th.textContent = LABELS[k];
+    headerRow.appendChild(th);
+  });
+  thead.appendChild(headerRow);
+
+  parsedRows.forEach(row => {
+    const tr = document.createElement('tr');
+    KEYS.forEach(k => {
+      const td = document.createElement('td');
+      td.textContent = row[k] || '';
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+
+function downloadCSV() {
+  const headers = KEYS.map(k => LABELS[k]);
+  const rows = parsedRows.map(row => KEYS.map(k => {
+    const val = (row[k] || '').toString().replace(/"/g, '""');
+    return `"${val}"`;
+  }));
+  const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'SCARF_Survey_Results_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function clearAll() {
+  document.getElementById('input').value = '';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('btn-csv').style.display = 'none';
+  document.getElementById('error-msg').style.display = 'none';
+  parsedRows = [];
+}
+</script>
+</body>
+</html>
